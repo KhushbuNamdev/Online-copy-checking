@@ -1,7 +1,7 @@
 import express from "express";
 import { registerUser, authUser, getme } from "../Controller/userController.js";
 import { protect } from "../Middleware/authmiddleware.js";
-
+import { validateRegister, validateLogin } from "../Validation/uservalidation.js";
 const router = express.Router();
 
 /**
@@ -41,7 +41,7 @@ const router = express.Router();
  *       201:
  *         description: User created successfully
  */
-router.post("/register", registerUser);
+router.post("/register", validateRegister, registerUser);
 
 /**
  * @swagger
@@ -69,8 +69,7 @@ router.post("/register", registerUser);
  *       200:
  *         description: User logged in successfully
  */
-router.post("/login", authUser);
-
+router.post("/login", validateLogin, authUser);
 /**
  * @swagger
  * /api/users/profile:
