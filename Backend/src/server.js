@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || "development"} mode on port ${PORT}`);
 });
-console.log(swaggerSpec.paths);
+// console.log(swaggerSpec.paths);
   console.log(`📄 Swagger Docs: http://localhost:${PORT}/api-docs`);
 app.use(errorHandler);
 
