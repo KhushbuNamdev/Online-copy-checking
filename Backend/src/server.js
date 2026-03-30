@@ -1,3 +1,7 @@
+import dns from 'node:dns/promises';
+// Set DNS servers before any other imports or connection logic
+dns.setServers(['1.1.1.1', '8.8.8.8']);
+
 import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userroute.js";
@@ -5,6 +9,7 @@ import { errorHandler } from "./Middleware/errorMiddleware.js";
 import cors from "cors";
 import { swaggerUi, swaggerSpec } from "../src/Config/swegger.js";
 import connectDB  from "../src/Config/db.js"
+
 dotenv.config();
 
 const app = express();
