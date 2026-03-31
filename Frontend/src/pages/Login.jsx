@@ -1,63 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserThunk } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // ✅ NEW
-import { loginUser } from "../redux/slices/authSlice"; // ✅ NEW
 import "../styles/global.css";
 
-const LoginForm = () => {
-  const navigate = useNavigate();
+const LoginPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { loading, error: apiError, token } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, error } = useSelector((state) => state.auth);
 
-  const [error, setError] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const validateEmail = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value);
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const validatePassword = (value) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-    return passwordRegex.test(value);
-  };
-
-  const handleSubmit = (e) => {
+  // ✅ FIXED LOGIN HANDLER
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setError("All fields are required");
-      return;
-    }
+    const res = await dispatch(loginUserThunk(formData));
 
-    if (!validateEmail(email)) {
-      setError("Enter a valid email address");
-      return;
-    }
-
-    if (!validatePassword(password)) {
-      setError("Weak password");
-      return;
-    }
-
-    setError("");
-
-    // ✅ Redux dispatch
-    dispatch(loginUser({ email, password }));
-  };
-
-  // ✅ Success hone pe redirect
-  useEffect(() => {
-    if (token) {
+    // if login success → go dashboard
+    if (res.payload?.token) {
       navigate("/dashboard");
     }
-  }, [token, navigate]);
+  };
 
   return (
     <div className="container">
@@ -66,43 +41,32 @@ const LoginForm = () => {
 
         <form onSubmit={handleSubmit}>
           <input
-            type="text"
-            placeholder="Email"
             className="input-field"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
           />
 
-          <div className="password-wrapper">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="input-field password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <input
+            className="input-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
 
-            <span
-              className="eye-icon"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "🙈" : "👁️"}
-            </span>
-          </div>
-
-          {/* ✅ Local validation error */}
-          {error && <p className="error">{error}</p>}
-
-          {/* ✅ API error */}
-          {apiError && <p className="error">{apiError}</p>}
-
-          <button type="submit" className="login-btn">
-            {loading ? "Loading..." : "Login"}
+          <button className="login-btn" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default LoginPage;

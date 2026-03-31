@@ -1,51 +1,170 @@
+// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import { loginUser, getProfile } from "../../api/authApi";
+
+// export const loginUserThunk = createAsyncThunk(
+//   "auth/loginUser",
+//   async ({ email, password }, thunkAPI) => {
+//     try {
+//       return await loginUser({ email, password });
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.response?.data?.message);
+//     }
+//   }
+// );
+
+// export const getProfileThunk = createAsyncThunk(
+//   "auth/getProfile",
+//   async (token, thunkAPI) => {
+//     try {
+//       return await getProfile(token);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.response?.data?.message);
+//     }
+//   }
+// );
+
+// const authSlice = createSlice({
+//   name: "auth",
+//   initialState: {
+//     user: null,
+//     token: null,
+//     profile: null,
+//     loading: false,
+//     error: null,
+//   },
+
+//   reducers: {
+//     logout: (state) => {
+//       state.user = null;
+//       state.token = null;
+//       state.profile = null;
+//     },
+//   },
+
+//   extraReducers: (builder) => {
+//     builder
+
+//       // LOGIN
+//       .addCase(loginUserThunk.pending, (state) => {
+//         state.loading = true;
+//       })
+//       .addCase(loginUserThunk.fulfilled, (state, action) => {
+//         state.loading = false;
+//         state.user = action.payload.user;
+//         state.token = action.payload.token;
+//       })
+//       .addCase(loginUserThunk.rejected, (state, action) => {
+//         state.loading = false;
+//         state.error = action.payload;
+//       })
+
+//       // PROFILE
+//       .addCase(getProfileThunk.pending, (state) => {
+//         state.loading = true;
+//       })
+//       .addCase(getProfileThunk.fulfilled, (state, action) => {
+//         state.loading = false;
+//         state.profile = action.payload;
+//       })
+//       .addCase(getProfileThunk.rejected, (state, action) => {
+//         state.loading = false;
+//         state.error = action.payload;
+//       });
+//   },
+// });
+
+// export const { logout } = authSlice.actions;
+// export default authSlice.reducer;
+
+
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { loginUser, getProfile } from "../../api/authApi";
 
-const API = "http://localhost:3000";
-
-// 🔥 Async login
-export const loginUser = createAsyncThunk(
+// ✅ LOGIN
+export const loginUserThunk = createAsyncThunk(
   "auth/loginUser",
-  async (userData, thunkAPI) => {
+  async ({ email, password }, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `${API}/api/users/login`,
-        userData
-      );
-      return response.data;
+      return await loginUser({ email, password });
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Login failed"
-      );
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
+
+// ✅ PROFILE
+export const getProfileThunk = createAsyncThunk(
+  "auth/getProfile",
+  async (token, thunkAPI) => {
+    try {
+      return await getProfile(token);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
     }
   }
 );
 
 const authSlice = createSlice({
   name: "auth",
+
+  // ✅ Restore token from localStorage
   initialState: {
     user: null,
-    token: null,
+    token: localStorage.getItem("token") || null,
+    profile: null,
     loading: false,
     error: null,
   },
-  reducers: {},
+
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.profile = null;
+
+      // ✅ remove token
+      localStorage.removeItem("token");
+    },
+  },
+
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+
+      // 🔐 LOGIN
+      .addCase(loginUserThunk.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
-        state.token = action.payload.token; // ✅ yaha sahi hai
+
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+
+        // ✅ Save token
+        localStorage.setItem("token", action.payload.token);
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUserThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // 👤 PROFILE
+      .addCase(getProfileThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getProfileThunk.fulfilled, (state, action) => {
+        state.loading = false;
+
+        // ✅ FIX: handle both response types
+        state.profile = action.payload.user || action.payload;
+      })
+      .addCase(getProfileThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
