@@ -34,5 +34,5 @@ apis: ["./src/routes/*.js"]
 };
 
 const swaggerSpec = swaggerJsdoc(options);
-console.log(swaggerSpec.paths);
+// console.log(swaggerSpec.paths);
 export { swaggerUi, swaggerSpec };

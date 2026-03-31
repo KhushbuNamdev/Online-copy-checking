@@ -5,6 +5,7 @@ dns.setServers(['1.1.1.1', '8.8.8.8']);
 import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userroute.js";
+import syllabusRoutes from "./routes/syllabusroutes.js";
 import { errorHandler } from "./Middleware/errorMiddleware.js";
 import cors from "cors";
 import { swaggerUi, swaggerSpec } from "../src/Config/swegger.js";
@@ -17,9 +18,12 @@ connectDB();
 // Middleware to read JSON
 app.use(express.json());
 app.use(cors());
+
 app.use("/api/users", userRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+app.use("/uploads", express.static("uploads"));
+app.use("/api/syllabus", syllabusRoutes);
+app.use("/api/classes", classRoutes);
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
