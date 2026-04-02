@@ -10,7 +10,7 @@ import { errorHandler } from "./Middleware/errorMiddleware.js";
 import cors from "cors";
 import { swaggerUi, swaggerSpec } from "../src/Config/swegger.js";
 import connectDB  from "../src/Config/db.js"
-
+import classRoutes from "./routes/classroutes.js"
 dotenv.config();
 
 const app = express();
