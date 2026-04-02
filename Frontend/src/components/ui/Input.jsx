@@ -1,14 +1,14 @@
 import React from "react";
 import "../../styles/global.css";
 
-const Input = ({ 
-  label, 
-  type = "text", 
-  name, 
-  value, 
-  onChange, 
-  placeholder, 
-  required = false, 
+const Input = ({
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  placeholder,
+  required = false,
   className = "",
   wrapperClassName = "",
   disabled = false,

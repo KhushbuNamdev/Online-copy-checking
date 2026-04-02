@@ -19,6 +19,7 @@ export default function SyllabusForm({ onSubmit, onClose, editData }) {
   });
 
   const [classes, setClasses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
     loadClasses();
@@ -42,6 +43,19 @@ export default function SyllabusForm({ onSubmit, onClose, editData }) {
       });
     }
   }, [editData]);
+
+  useEffect(() => {
+    if (form.className) {
+      const selectedClass = classes.find((c) => c._id === form.className || c.name === form.className);
+      if (selectedClass && selectedClass.subjects) {
+        setSubjects(selectedClass.subjects);
+      } else {
+        setSubjects([]);
+      }
+    } else {
+      setSubjects([]);
+    }
+  }, [form.className, classes]);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -84,14 +98,10 @@ export default function SyllabusForm({ onSubmit, onClose, editData }) {
           name="subject"
           value={form.subject}
           onChange={handleChange}
-          placeholder="Select Subject"
+          placeholder={form.className ? "Select Subject" : "Select a class first"}
           required
-          options={[
-            "English", "Hindi", "Mathematics", "Science", "Social Science",
-            "Physics", "Chemistry", "Biology", "Computer Science", 
-            "Accountancy", "Business Studies", "Economics", "History", 
-            "Geography", "Political Science"
-          ]}
+          disabled={!form.className}
+          options={subjects}
         />
 
         <div className="input-group">
@@ -115,11 +125,19 @@ export default function SyllabusForm({ onSubmit, onClose, editData }) {
         </div>
 
         <div className="form-buttons">
-          <Button type="submit" shimmer>
-            <CheckCircle size={18} /> {editData ? "Refine Syllabus" : "Establish Syllabus"}
+          <Button 
+            type="submit" 
+            shimmer 
+            style={{ background: 'var(--accent-primary)' }}
+          >
+            <CheckCircle size={18} /> Establish Syllabus
           </Button>
 
-          <Button variant="secondary" onClick={onClose}>
+          <Button 
+            variant="primary" 
+            onClick={onClose}
+            className="dismiss-glass-btn"
+          >
             Dismiss
           </Button>
         </div>

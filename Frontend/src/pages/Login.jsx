@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserThunk } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { FileText, Search } from "lucide-react";
 import "../styles/global.css";
 
 import Card from "../components/ui/Card";
@@ -37,14 +38,15 @@ const LoginPage = () => {
 
   return (
     <div className="login-page-container">
-      {/* Animated Floating Bubbles */}
-      <div className="bubble bubble-1"></div>
-      <div className="bubble bubble-2"></div>
-      <div className="bubble bubble-3"></div>
-      <div className="bubble bubble-4"></div>
-
       <Card className="login-glass-card">
         <div className="login-header-section">
+          <div className="brand-logo-container">
+            <div className="logo-glow"></div>
+            <div className="logo-icon-box">
+              <FileText size={32} color="#fff" strokeWidth={1.5} />
+              <Search size={22} color="#0cebeb" className="search-lens-icon" strokeWidth={2.5} />
+            </div>
+          </div>
           <h2 className="login-page-title">Copy Checker</h2>
         </div>
 
@@ -113,70 +115,15 @@ const LoginPage = () => {
           z-index: 0;
         }
         
-        /* Floating Bubbles Animation */
-        .bubble {
-          position: absolute;
-          border-radius: 50%;
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
-          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          z-index: 1; 
-          animation: floatBubble 10s infinite ease-in-out alternate;
-        }
-        .bubble-1 {
-          width: 150px;
-          height: 150px;
-          top: 15%;
-          left: 15%;
-          animation-duration: 12s;
-        }
-        .bubble-2 {
-          width: 250px;
-          height: 250px;
-          bottom: 10%;
-          right: 15%;
-          animation-duration: 18s;
-          animation-delay: -5s;
-        }
-        .bubble-3 {
-          width: 90px;
-          height: 90px;
-          top: 30%;
-          right: 25%;
-          animation-duration: 8s;
-          animation-delay: -2s;
-        }
-        .bubble-4 {
-          width: 120px;
-          height: 120px;
-          bottom: 30%;
-          left: 10%;
-          animation-duration: 14s;
-          animation-delay: -8s;
-        }
-
-        @keyframes floatBubble {
-          0% {
-            transform: translateY(0) scale(1) translateX(0);
-          }
-          50% {
-            transform: translateY(-30px) scale(1.05) translateX(15px);
-          }
-          100% {
-            transform: translateY(20px) scale(0.95) translateX(-15px);
-          }
-        }
         .login-glass-card {
            position: relative;
            z-index: 2;
            width: 100%;
            max-width: 440px;
            padding: 40px;
-           background: rgba(30, 41, 59, 0.7);
-           backdrop-filter: blur(20px);
-           -webkit-backdrop-filter: blur(20px);
+           background: rgba(30, 41, 59, 0.15);
+           backdrop-filter: blur(30px);
+           -webkit-backdrop-filter: blur(30px);
            border: 1px solid rgba(255, 255, 255, 0.1);
            border-radius: 24px;
            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -184,6 +131,46 @@ const LoginPage = () => {
         .login-header-section {
           text-align: center;
           margin-bottom: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .brand-logo-container {
+          position: relative;
+          width: 70px;
+          height: 70px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 15px;
+          box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
+        }
+        .logo-glow {
+          position: absolute;
+          inset: -5px;
+          border: 1px solid rgba(99, 102, 241, 0.4);
+          border-radius: 50%;
+          animation: pulseGlow 3s infinite;
+        }
+        @keyframes pulseGlow {
+          0% { transform: scale(0.95); opacity: 0.8; }
+          50% { transform: scale(1.1); opacity: 0.4; }
+          100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .logo-icon-box {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .search-lens-icon {
+          position: absolute;
+          bottom: -5px;
+          right: -8px;
+          filter: drop-shadow(0 0 5px rgba(12, 235, 235, 0.6));
         }
         .login-page-title {
           font-size: 28px;

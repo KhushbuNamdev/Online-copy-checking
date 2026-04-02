@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import Syllabus from "../pages/syllabus/Syllabus";
 import QuestionPaper from "../pages/question/QuestionPaper";
 import Profile from "../pages/Profile";
+import History from "../pages/History";
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
       <Route path="/syllabus" element={<Syllabus />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/question-paper" element={<QuestionPaper />} />
+      <Route path="/history" element={<History />} />
     </Routes>
   );
 }

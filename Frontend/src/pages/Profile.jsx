@@ -56,11 +56,11 @@ export default function Profile() {
               </div>
             </div>
             <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '8px' }}>
-              {profile?.name || "Professor Khushbu"}
+              {profile?.name || "Faculty Member"}
             </h2>
             <p style={{ color: 'var(--text-dim)', fontSize: '15px', fontWeight: '600', marginBottom: '25px' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                <ShieldCheck size={16} color="#10b981" /> Administrator
+                <ShieldCheck size={16} color="#10b981" /> {profile?.isAdmin ? "Administrator" : "Professor"}
               </span>
             </p>
 
@@ -86,11 +86,11 @@ export default function Profile() {
             <div className="info-grid">
               <div className="info-item">
                 <span className="info-label">Full Name</span>
-                <div className="info-value">{profile?.name || "Professor Khushbu Namdev"}</div>
+                <div className="info-value">{profile?.name || "Update your identity"}</div>
               </div>
               <div className="info-item">
                 <span className="info-label">Email Address</span>
-                <div className="info-value">{profile?.email || "khushbu@university.edu"}</div>
+                <div className="info-value">{profile?.email || "syncing email..."}</div>
               </div>
               <div className="info-item">
                 <span className="info-label">Role / Department</span>

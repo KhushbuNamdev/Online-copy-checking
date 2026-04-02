@@ -12,7 +12,8 @@ import {
   Zap,
   HelpCircle,
   Sun,
-  Moon
+  Moon,
+  Search
 } from "lucide-react";
 import "../styles/global.css";
 import { getProfileThunk, logout } from "../redux/slices/authSlice";
@@ -22,7 +23,6 @@ import { useTheme } from "../context/ThemeContext";
 import profilePic from "../assets/profile_refined.png";
 
 export default function DashboardLayout({ children }) {
-  // ... continues
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -72,6 +72,13 @@ export default function DashboardLayout({ children }) {
 
       <aside className="sidebar">
         <div className="sidebar-brand">
+          <div className="brand-logo-container-sidebar">
+            <div className="logo-glow-sidebar"></div>
+            <div className="logo-icon-box-sidebar">
+              <FileText size={24} color="#fff" strokeWidth={1.5} />
+              <Search size={16} color="#0cebeb" className="search-lens-icon-sidebar" strokeWidth={2.5} />
+            </div>
+          </div>
           <h2 className="brand-name">CopyChecker</h2>
         </div>
 
@@ -92,16 +99,11 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         <div className="sidebar-footer">
-          <button className="nav-link theme-toggle" onClick={toggleTheme} style={{ marginBottom: '8px' }}>
+          <button className="nav-link theme-toggle" onClick={toggleTheme}>
             <span className="icon-wrapper">
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </span>
             <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
-          </button>
-
-          <button className="nav-link logout-sidebar" onClick={handleLogout}>
-            <span className="icon-wrapper"><LogOut size={20} /></span>
-            <span>Sign Out</span>
           </button>
         </div>
       </aside>
@@ -116,8 +118,8 @@ export default function DashboardLayout({ children }) {
             <div className="profile-box" ref={dropdownRef}>
               <div className="user" onClick={() => setOpen(!open)}>
                 <div className="user-info">
-                  <span className="user-name">{profile?.name || "Prof. Khushbu"}</span>
-                  <span className="user-role">Administrator</span>
+                  <span className="user-name">{profile?.name || "User"}</span>
+                  <span className="user-role">{profile?.isAdmin ? "Administrator" : "Professor"}</span>
                 </div>
                 <div className="profile-img-wrapper">
                   <img src={profilePic} alt="profile" className="profile-img" />
@@ -130,8 +132,8 @@ export default function DashboardLayout({ children }) {
                   <div className="dropdown-header">
                     <img src={profilePic} alt="Profile" className="dropdown-avatar" />
                     <div className="dropdown-user-info">
-                      <span className="dropdown-name">{profile?.name || "Professor Khushbu"}</span>
-                      <span className="dropdown-email">{profile?.email || "prof.khushbu@university.edu"}</span>
+                      <span className="dropdown-name">{profile?.name || "Faculty Member"}</span>
+                      <span className="dropdown-email">{profile?.email || "syncing email..."}</span>
                     </div>
                   </div>
 
@@ -280,6 +282,45 @@ export default function DashboardLayout({ children }) {
         .logout-btn:hover {
           background: rgba(239, 68, 68, 0.1);
           color: #fca5a5;
+        }
+
+        /* Sidebar Logo Styles */
+        .brand-logo-container-sidebar {
+          position: relative;
+          width: 48px;
+          height: 48px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+        .logo-glow-sidebar {
+          position: absolute;
+          inset: -3px;
+          border: 1px solid rgba(99, 102, 241, 0.3);
+          border-radius: 14px;
+          animation: pulseGlowSidebar 3s infinite;
+        }
+        @keyframes pulseGlowSidebar {
+          0% { transform: scale(0.98); opacity: 0.6; }
+          50% { transform: scale(1.05); opacity: 0.3; }
+          100% { transform: scale(0.98); opacity: 0.6; }
+        }
+        .logo-icon-box-sidebar {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .search-lens-icon-sidebar {
+          position: absolute;
+          bottom: -3px;
+          right: -5px;
+          filter: drop-shadow(0 0 3px rgba(12, 235, 235, 0.6));
         }
       `}</style>
     </div>

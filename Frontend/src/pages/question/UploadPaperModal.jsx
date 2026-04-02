@@ -163,12 +163,17 @@ export default function UploadPaper({ onClose, onSave }) {
           <Button 
             type="submit" 
             shimmer 
-            style={{ background: 'var(--accent-secondary)' }}
+            style={{ background: 'var(--accent-primary)' }}
           >
             <CheckCircle size={18} /> Save Assessment
           </Button>
 
-          <Button variant="secondary" onClick={onClose}>
+          <Button 
+            variant="primary" 
+            onClick={onClose}
+            className="cancel-glass-btn"
+            style={{ background: 'var(--accent-primary)' }}
+          >
             Cancel
           </Button>
         </div>
